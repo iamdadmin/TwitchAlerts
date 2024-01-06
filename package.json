@@ -1,25 +1,25 @@
 {
-  "name": "twitch-alerts",
-  "version": "2.0.0",
+  "name": "twitch-alerts-sqlite",
+  "version": "2.0.0-sqlite",
   "description": "Get real time alerts on discord when going live on twitch",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "core": "node index.js",
     "web": "node web.js"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Harfeur/TwitchAlerts.git"
+    "url": "git+https://github.com/iamdadmin/TwitchAlerts-sqlite.git"
   },
-  "author": "Harfeur <contact@harfeur.fr> (https://www.harfeur.fr)",
+  "author": "iamdadmin <iamdad_min@outlook.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Harfeur/TwitchAlerts/issues"
+    "url": "https://github.com/iamdadmin/TwitchAlerts-sqlite/issues"
   },
-  "homepage": "https://twitchbot.harfeur.fr",
+  "homepage": "https://github.com/iamdadmin",
   "dependencies": {
     "@sapphire/time-utilities": "^1.7.10",
     "@twurple/api": "^7.0.1",
@@ -33,6 +33,6 @@
     "express": "^4.18.2",
     "fuse.js": "^6.6.2",
     "node-twitch": "^0.5.0",
-    "pg": "^8.11.1"
+    "sqlite": "^5.1.1"
   }
 }
