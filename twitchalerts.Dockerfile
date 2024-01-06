@@ -8,7 +8,7 @@ ENV DATABASE_URL="/database/database.sqlite3"
 
 WORKDIR /app
 
-COPY . .
+COPY twitchalerts/ /app/
 
 RUN npm install --omit=dev \ 
     && apk add --no-cache curl coreutils tzdata shadow xz-utils \
@@ -28,7 +28,7 @@ RUN npm install --omit=dev \
     && addgroup -g ${PGID} -S twitchalerts \
     && adduser -u {$PUID} -G twitchalerts -H -S twitchalerts
 
-COPY ./docker /
+COPY docker /
 
 EXPOSE ${PORT}
 VOLUME /database
