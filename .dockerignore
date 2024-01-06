@@ -1,9 +1,5 @@
 dist
 node_modules
 README.md
-docker
-twitchalerts.dockerfile
 .env.example
 .gitignore
-docker-compose.yaml
-database
