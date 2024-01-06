@@ -11,7 +11,7 @@ WORKDIR /app
 COPY twitchalerts/ /app/
 
 RUN npm install --omit=dev \ 
-    && apk add --no-cache curl coreutils tzdata shadow xz-utils \
+    && apk add --no-cache curl coreutils tzdata shadow xz \
     && alpineArch="$(apk --print-arch)" \
         && case "${alpineArch##*-}" in \
             aarch64) ARCH='aarch64';; \
@@ -21,14 +21,19 @@ RUN npm install --omit=dev \
         *) echo "unsupported architecture"; exit 1 ;; \
         esac \
     && cd /tmp \
-    && curl -L -s https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-${ARCH}.tar.xz | tar -Jxpf -C / - \
+    && curl -L -s https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz \
+    && tar -C / -Jxpf s6-overlay-noarch.tar.xz \
+    && curl -L -s https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-${ARCH}.tar.xz \
+    && tar -C / -Jxpf s6-overlay-${ARCH}.tar.xz \
     && apk del --no-cache curl \
     && apk del --purge \
     && rm -rf /tmp/s6* \
-    && addgroup -g ${PGID} -S twitchalerts \
-    && adduser -u {$PUID} -G twitchalerts -H -S twitchalerts
+    && addgroup -g $PGID -S twitchalerts \
+    && adduser -u $PUID -G twitchalerts -H -S twitchalerts
 
 COPY docker /
 
 EXPOSE ${PORT}
 VOLUME /database
+
+ENTRYPOINT ["/init"]
