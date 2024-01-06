@@ -4,3 +4,4 @@ data
 .idea
 twitchalerts
 .DS_Store
+database/database.sqlite
