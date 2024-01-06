@@ -4,7 +4,7 @@ services:
     hostname: twwbot
     build:
       context: /opt/appstack/twwbot
-      dockerfile: twitchalerts.dockerfile
+      dockerfile: /opt/appstack/twwbot/twitchalerts.Dockerfile
     ports:
       - "3000:3000/tcp"
     environment:
