@@ -10,28 +10,7 @@ module.exports = async client => {
     await client.application.commands.fetch();
 
     let webhooks = [];
-    /*
-    for (let i = 0; i < parseInt(process.env.WEBHOOK_CLIENTS); i++) {
-        const authProvider = new AppTokenAuthProvider(process.env[`WEBHOOK_CLIENT_${i}`], process.env[`WEBHOOK_SECRET_${i}`])
-        const apiClient = new ApiClient({authProvider});
-        const webhookMiddleware = new EventSubHttpListener({
-            apiClient,
-            adapter: new ReverseProxyAdapter({
-                hostName: `webhook${i}.${process.env.DOMAIN}`,
-                port: parseInt(process.env.PORT) + i + 1
-            }),
-            secret: process.env[`WEBHOOK_SECRET_${i}`]
-        });
-        webhookMiddleware.start();
-        webhooks.push(webhookMiddleware);
-        webhookMiddleware.onSubscriptionCreateFailure((sub, err) => {
-            logger.error(err);
-        });
-        webhookMiddleware.onRevoke(sub => {
-            logger.error("Revocation");
-        });
-    }
-    */
+
     const fl = new FetchLive(client, webhooks);
     client.container.pg.passFetchLive(fl);
 

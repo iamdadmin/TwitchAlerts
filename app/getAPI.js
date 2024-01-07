@@ -23,7 +23,7 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
 
     const DISCORD_URL = oauth.generateAuthUrl({
         scope: SCOPE,
-        redirectUri: "https://" + process.env.DOMAIN + "/connect",
+        redirectUri: process.env.DISCORD_REDIRECT_URI,
         clientId: process.env.DISCORD_CLIENT_ID,
         prompt: "none",
         responseType: "code"

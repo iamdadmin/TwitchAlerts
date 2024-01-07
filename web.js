@@ -7,7 +7,7 @@ const logger = require("./modules/logger");
 const oauth = new DiscordOauth2({
     clientId: process.env.DISCORD_CLIENT_ID,
     clientSecret: process.env.DISCORD_CLIENT_SECRET,
-    redirectUri: "https://" + process.env.DOMAIN + "/connect"
+    redirectUri: process.env.DISCORD_REDIRECT_URI
 });
 
 async function init(pgsql, discord, twitch, fetchLive){
