@@ -3,3 +3,5 @@ node_modules
 data
 .idea
 database/database.sqlite
+docker-compose.yaml
+.DS_Store
