@@ -21,19 +21,19 @@
   },
   "homepage": "https://twitchbot.harfeur.fr",
   "dependencies": {
-    "@sapphire/time-utilities": "^1.7.10",
+    "@sapphire/time-utilities": "^1.7.11",
     "@twurple/api": "^7.0.1",
     "@twurple/auth": "^7.0.1",
-    "@twurple/eventsub-http": "^7.0.1",
+    "@twurple/eventsub-http": "^7.0.7",
     "body-parser": "^1.20.2",
     "colorette": "^2.0.20",
     "cookie-parser": "^1.4.6",
-    "discord-oauth2": "^2.11.0",
-    "discord.js": "^14.11.0",
+    "discord-oauth2": "^2.12.0",
+    "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "fuse.js": "^6.6.2",
     "node-twitch": "^0.5.0",
-    "pg": "^8.11.1"
+    "pg": "^8.11.3"
   }
 }
