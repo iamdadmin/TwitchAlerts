@@ -24,11 +24,10 @@ You can then run the bot with `npm run start` and (optionally) the webserver wit
 
 ### Host your own bot using Docker
 
-Optionally, you can 
-
+Optionally, you can utilise the docker-compose example to run this under docker.
 
 ## License
 
-Inspired from [GuideBot](https://github.com/AnIdiotsGuide/guidebot) under the MIT license.
-
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
+Inspired from [GuideBot](https://github.com/AnIdiotsGuide/guidebot) under the MIT license.

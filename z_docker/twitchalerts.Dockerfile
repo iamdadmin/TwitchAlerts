@@ -4,11 +4,11 @@ ENV S6_OVERLAY_VERSION=3.1.6.2
 ENV PUID=901
 ENV PGID=901
 ENV PORT=3000
-ENV DATABASE_URL="/database/database.sqlite3"
+ENV DATABASE_URL=
 
 WORKDIR /app
 
-COPY twitchalerts/ /app/
+COPY ../ /app/
 
 RUN npm install --omit=dev \ 
     && apk add --no-cache curl coreutils tzdata shadow xz-utils \
@@ -28,7 +28,6 @@ RUN npm install --omit=dev \
     && addgroup -g ${PGID} -S twitchalerts \
     && adduser -u {$PUID} -G twitchalerts -H -S twitchalerts
 
-COPY docker /
+COPY etc/ /etc/
 
 EXPOSE ${PORT}
-VOLUME /database
