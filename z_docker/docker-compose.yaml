@@ -1,14 +1,14 @@
 services:
   twwbot:
-    container_name: twwbot
-    hostname: twwbot
+    container_name: twitchalerts
+    hostname: twitchalerts
     build:
-      context: /opt/appstack/twwbot
-      dockerfile: /opt/appstack/twwbot/twitchalerts.Dockerfile
+      context: /opt/twitchalerts
+      dockerfile: /opt/twitchalerts/twitchalerts.Dockerfile
     ports:
       - "3000:3000/tcp"
     environment:
-      DATABASE: "/database/database.sqlite3"
+      DATABASE: "Your Database URL"
       DISCORD_CLIENT_ID: "YOUR_DISCORD_CLIENT_ID"
       DISCORD_CLIENT_SECRET: "YOUR_DISCORD_CLIENT_SECRET"
       DISCORD_REDIRECT_URI: "https://thewishingwell.uk.to/connect"
@@ -16,6 +16,3 @@ services:
       TWITCH_BOT_CLIENT_ID: "YOUR_TWITCH_CLIENT_ID"
       TWITCH_BOT_CLIENT_SECRET: "YOUR_TWITCH_CLIENT_SECRET"
       TWITCHBOT: "Bot secret of your Discord application"
-      URL: "https://thewishingwell.uk.to"
-    volumes:
-      - "/opt/appstack/twwbot/database:/database"
