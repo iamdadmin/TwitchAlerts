@@ -1,10 +1,11 @@
 FROM node:20-alpine
 
-ENV S6_OVERLAY_VERSION=3.1.6.2
+ARG S6_OVERLAY_VERSION=3.1.6.2
+
+# Set some default env vars for things we just can't do without
 ENV PUID=901
 ENV PGID=901
 ENV PORT=3000
-ENV DATABASE_URL=
 
 WORKDIR /app
 

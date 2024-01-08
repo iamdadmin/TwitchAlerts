@@ -8,11 +8,15 @@ services:
     ports:
       - "3000:3000/tcp"
     environment:
+      # The following are required and this will not work without them being appropriately set
       DATABASE: "Your Database URL"
       DISCORD_CLIENT_ID: "YOUR_DISCORD_CLIENT_ID"
       DISCORD_CLIENT_SECRET: "YOUR_DISCORD_CLIENT_SECRET"
-      DISCORD_REDIRECT_URI: "https://thewishingwell.uk.to/connect"
-      PORT: 3000
+      DISCORD_REDIRECT_URI: "https://yourdomain/connect"
       TWITCH_BOT_CLIENT_ID: "YOUR_TWITCH_CLIENT_ID"
       TWITCH_BOT_CLIENT_SECRET: "YOUR_TWITCH_CLIENT_SECRET"
       TWITCHBOT: "Bot secret of your Discord application"
+      # The following are optional and default to these values in the dockerfile
+      PUID: 901
+      PGID: 901
+      PORT: 3000
