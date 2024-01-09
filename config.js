@@ -1,4 +1,4 @@
-const {GatewayIntentBits, Partials} = require("discord.js");
+import { GatewayIntentBits, Partials } from "discord.js";
 
 const config = {
     // Bot Support, level 8 by default. Array of user ID strings
@@ -8,4 +8,4 @@ const config = {
     partials: [Partials.Channel],
 };
 
-module.exports = config;
+export default config;

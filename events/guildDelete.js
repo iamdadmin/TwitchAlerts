@@ -1,4 +1,4 @@
-const logger = require("../modules/logger.js");
+const logger = require('../modules/logger.js');
 
 module.exports = (client, guild) => {
     if (!guild.available) return; // If there is an outage, return.

@@ -1,11 +1,11 @@
 const express = require('express');
 const Database = require('../models/database');
-const DiscordOauth2 = require("discord-oauth2");
+const DiscordOauth2 = require('discord-oauth2');
 const Discord = require('discord.js');
-const {ApiClient} = require("@twurple/api");
-const f = require("./functions");
-const bodyParser = require("body-parser");
-const logger = require("../modules/logger");
+const {ApiClient} = require('@twurple/api');
+const f = require('./functions');
+const bodyParser = require('body-parser');
+const logger = require('../modules/logger');
 
 
 /**
@@ -20,11 +20,11 @@ const logger = require("../modules/logger");
  */
 module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirname, cookies) {
 
-    app.post("/edit", bodyParser.json(), bodyParser.urlencoded({extended: true}), async (req, res) => {
+    app.post('/edit', bodyParser.json(), bodyParser.urlencoded({extended: true}), async (req, res) => {
         if (req.cookies.user && await functions.checkToken(req.cookies.user)) {
             if (req.body.guild_id && req.body.streamer_id && req.body.streamer_name && req.body.start && req.body.end && /^\d+$/.test(req.body.streamer_id) && req.body.display_game && req.body.display_viewers) {
-                req.body.display_game = (req.body.display_game === "true");
-                req.body.display_viewers = (req.body.display_viewers === "true");
+                req.body.display_game = (req.body.display_game === 'true');
+                req.body.display_viewers = (req.body.display_viewers === 'true');
                 try {
                     let guild = await discord.guilds.fetch(req.body.guild_id);
                     let member = await guild.members.fetch(cookies.get(req.cookies.user).id);
@@ -40,14 +40,14 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
                         res.sendStatus(406);
                         return;
                     }
-                    await pgsql.editAlert(req.body.guild_id, req.body.streamer_id, user.id, req.body.start, req.body.end, req.body.display_game, req.body.display_viewers)
+                    await pgsql.editAlert(req.body.guild_id, req.body.streamer_id, user.id, req.body.start, req.body.end, req.body.display_game, req.body.display_viewers);
                     res.send({
                         id: user.id,
                         displayName: user.displayName,
                         profilePictureUrl: user.profilePictureUrl
                     });
                 } catch (err) {
-                    if (err.code === "23505") res.sendStatus(409); else {
+                    if (err.code === '23505') res.sendStatus(409); else {
                         res.sendStatus(500);
                         logger.error(err);
                     }
@@ -60,7 +60,7 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
         }
     });
 
-    app.post("/move", bodyParser.json(), bodyParser.urlencoded({extended: true}), async (req, res) => {
+    app.post('/move', bodyParser.json(), bodyParser.urlencoded({extended: true}), async (req, res) => {
         if (req.cookies.user && await functions.checkToken(req.cookies.user)) {
             if (req.body.guild_id && req.body.streamer_id && req.body.channel && /^\d+$/.test(req.body.streamer_id)) {
                 let guild;
@@ -80,9 +80,9 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
                         channel = await guild.channels.fetch(req.body.channel);
                     } else {
                         channel = guild.channels.cache.find(c => c.name === req.body.channel);
-                        if (!channel) throw new Error("Non trouvé");
+                        if (!channel) throw new Error('Non trouvé');
                     }
-                    if (channel.type !== Discord.ChannelType.GuildText && channel.type !== Discord.ChannelType.GuildAnnouncement) throw new Error("Canal non texte");
+                    if (channel.type !== Discord.ChannelType.GuildText && channel.type !== Discord.ChannelType.GuildAnnouncement) throw new Error('Canal non texte');
                 } catch (e) {
                     res.sendStatus(404);
                     return;
@@ -103,13 +103,13 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
         } else {
             res.sendStatus(401);
         }
-    })
+    });
 
-    app.post("/create", bodyParser.json(), bodyParser.urlencoded({extended: true}), async (req, res) => {
+    app.post('/create', bodyParser.json(), bodyParser.urlencoded({extended: true}), async (req, res) => {
         if (req.cookies.user && await functions.checkToken(req.cookies.user)) {
             if (req.body.guild_id && req.body.streamer_name && req.body.start && req.body.end && req.body.channel && req.body.display_game && req.body.display_viewers) {
-                req.body.display_game = (req.body.display_game === "true");
-                req.body.display_viewers = (req.body.display_viewers === "true");
+                req.body.display_game = (req.body.display_game === 'true');
+                req.body.display_viewers = (req.body.display_viewers === 'true');
                 // Check rights
                 let guild;
                 try {
@@ -128,9 +128,9 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
                         channel = await guild.channels.fetch(req.body.channel);
                     } else {
                         channel = guild.channels.cache.find(c => c.name === req.body.channel);
-                        if (!channel) throw new Error("Non trouvé");
+                        if (!channel) throw new Error('Non trouvé');
                     }
-                    if (channel.type !== Discord.ChannelType.GuildText && channel.type !== Discord.ChannelType.GuildAnnouncement) throw new Error("Canal non texte");
+                    if (channel.type !== Discord.ChannelType.GuildText && channel.type !== Discord.ChannelType.GuildAnnouncement) throw new Error('Canal non texte');
                 } catch (e) {
                     res.sendStatus(404);
                     return;
@@ -157,10 +157,10 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
                         },
                         guild_id: guild.id,
                         guild_name: guild.name,
-                        icon: guild.icon ? "https://cdn.discordapp.com/icons/" + guild.id + "/" + guild.icon + ".png" : "/assets/img/icons/discord.png"
+                        icon: guild.icon ? 'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.png' : '/assets/img/icons/discord.png'
                     });
                 } catch (err) {
-                    if (err.code === "23505") res.sendStatus(409); else {
+                    if (err.code === '23505') res.sendStatus(409); else {
                         res.sendStatus(500);
                         logger.error(err);
                     }
@@ -173,7 +173,7 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
         }
     });
 
-    app.post("/delete", bodyParser.json(), bodyParser.urlencoded({extended: true}), async (req, res) => {
+    app.post('/delete', bodyParser.json(), bodyParser.urlencoded({extended: true}), async (req, res) => {
         if (req.cookies.user && await functions.checkToken(req.cookies.user)) {
             if (req.body.guild_id && req.body.streamer_id && /^\d+$/.test(req.body.streamer_id)) {
                 try {
@@ -187,9 +187,9 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
                 }
                 try {
                     await pgsql.deleteAlert(req.body.guild_id, req.body.streamer_id);
-                    res.send("Done");
+                    res.send('Done');
                 } catch (err) {
-                    if (err.code === "23505") res.sendStatus(409); else {
+                    if (err.code === '23505') res.sendStatus(409); else {
                         res.sendStatus(500);
                         logger.error(err);
                     }
@@ -201,4 +201,4 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
             res.sendStatus(401);
         }
     });
-}
+};

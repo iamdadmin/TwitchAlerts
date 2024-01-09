@@ -1,13 +1,13 @@
 const express = require('express');
 const Database = require('../models/database');
-const DiscordOauth2 = require("discord-oauth2");
+const DiscordOauth2 = require('discord-oauth2');
 const Discord = require('discord.js');
-const {PermissionsBitField} = require("discord.js");
-const {ApiClient} = require("@twurple/api");
-const f = require("./functions");
-const logger = require("../modules/logger");
+const {PermissionsBitField} = require('discord.js');
+const {ApiClient} = require('@twurple/api');
+const f = require('./functions');
+const logger = require('../modules/logger');
 
-const SCOPE = "guilds identify guilds.members.read";
+const SCOPE = 'guilds identify guilds.members.read';
 
 /**
  * @param {express.Application} app Application express
@@ -25,9 +25,9 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
         scope: SCOPE,
         redirectUri: process.env.DISCORD_REDIRECT_URI,
         clientId: process.env.DISCORD_CLIENT_ID,
-        prompt: "none",
-        responseType: "code"
-    })
+        prompt: 'none',
+        responseType: 'code'
+    });
 
     app.get('/dashboard', async (req, res) => {
         if (req.cookies.user && await functions.checkToken(req.cookies.user)) {
@@ -47,7 +47,7 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
                 if (!member.permissions.has(Discord.PermissionsBitField.Flags.ManageGuild)) throw new Error("Permissions insuffisantes pour l'utilisateur");
             } catch (err) {
                 logger.error(err);
-                res.redirect("/dashboard");
+                res.redirect('/dashboard');
                 return;
             }
             res.sendFile('/public/server.html', {
@@ -60,11 +60,11 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
 
     app.get('/connect', async (req, res) => {
         if (req.query.guild_id) {
-            res.redirect("/dashboard/" + req.query.guild_id);
+            res.redirect('/dashboard/' + req.query.guild_id);
         } else if (req.query.code) {
             try {
                 let data = await oauth.tokenRequest({
-                    code: req.query.code, scope: SCOPE, grantType: "authorization_code"
+                    code: req.query.code, scope: SCOPE, grantType: 'authorization_code'
                 });
 
                 // Create a cookie
@@ -81,12 +81,12 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
                     time: Date.now(), timeGuilds: Date.now(), id: user.id, guilds: guilds, ...data
                 });
 
-                res.cookie("user", cookie, {
+                res.cookie('user', cookie, {
                     maxAge: 3600000 * 24 * 30,
                     secure: true,
                     httpOnly: true
                 });
-                res.redirect("/dashboard");
+                res.redirect('/dashboard');
             } catch (err) {
                 res.sendStatus(500);
                 logger.error(err);
@@ -102,7 +102,7 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
 
             let data = {
                 active: [], inactive: []
-            }
+            };
 
             try {
                 for (const i in guilds) {
@@ -116,16 +116,16 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
                                 name: guild.name,
                                 id: guild.id,
                                 alerts: count,
-                                icon: guild.icon ? "https://cdn.discordapp.com/icons/" + guild.id + "/" + guild.icon + ".png" : "/assets/img/icons/discord.png"
+                                icon: guild.icon ? 'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.png' : '/assets/img/icons/discord.png'
                             });
                         } catch (err) {
                             data.inactive.push({
                                 name: guild_partial.name,
                                 id: guild_partial.id,
-                                icon: guild_partial.icon ? "https://cdn.discordapp.com/icons/" + guild_partial.id + "/" + guild_partial.icon + ".png" : "/assets/img/icons/discord.png",
+                                icon: guild_partial.icon ? 'https://cdn.discordapp.com/icons/' + guild_partial.id + '/' + guild_partial.icon + '.png' : '/assets/img/icons/discord.png',
                                 invite: oauth.generateAuthUrl({
                                     clientId: process.env.DISCORD_CLIENT_ID,
-                                    scope: "bot applications.commands",
+                                    scope: 'bot applications.commands',
                                     permissions: 478208,
                                     guildId: guild_partial.id,
                                     disableGuildSelect: true
@@ -143,7 +143,7 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
         } else {
             res.sendStatus(401);
         }
-    })
+    });
 
     app.get('/alerts', async (req, res) => {
         if (req.cookies.user && await functions.checkToken(req.cookies.user) && req.query.server) {
@@ -162,8 +162,8 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
                 alerts: [],
                 guild_id: guild.id,
                 guild_name: guild.name,
-                icon: guild.icon ? "https://cdn.discordapp.com/icons/" + guild.id + "/" + guild.icon + ".png" : "/assets/img/icons/discord.png"
-            }
+                icon: guild.icon ? 'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.png' : '/assets/img/icons/discord.png'
+            };
 
             const alerts = await pgsql.listAlertsByGuild(guild.id);
             for (const alert of alerts) {
@@ -200,11 +200,11 @@ module.exports = function (app, pgsql, oauth, discord, twitch, functions, dirnam
                     return -1;
                 }
                 return 0;
-            })
+            });
             res.send(data);
         } else {
             res.sendStatus(402);
         }
     });
 
-}
+};
