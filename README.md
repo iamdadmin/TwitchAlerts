@@ -24,7 +24,7 @@ You can then run the bot with `npm run start` and (optionally) the webserver wit
 
 ### Host your own bot using Docker
 
-Optionally, you can utilise the docker-compose example to run this under docker.
+Optionally, you can utilise the docker-compose example to run this under docker. See the z_docker folder for more information.
 
 ## License
 

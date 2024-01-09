@@ -1,7 +1,7 @@
-const {EmbedBuilder, PermissionsBitField} = require("discord.js");
-const {getString} = require("../modules/language");
-const logger = require("../modules/logger");
-const {generateLiveEmbed} = require("../models/embedService");
+const {EmbedBuilder, PermissionsBitField} = require('discord.js');
+const {getString} = require('../modules/language');
+const logger = require('../modules/logger');
+const {generateLiveEmbed} = require('../models/embedService');
 
 class FetchLive {
 
@@ -27,19 +27,19 @@ class FetchLive {
         for (const alert of alerts) {
             this.streamerAdded(alert.streamer_id);
         }
-        logger.log("Subscriptions are ready", "ready");
+        logger.log('Subscriptions are ready', 'ready');
         setInterval((function (self) {
             return function () {
                 self.checkCurrentStreams();
-            }
+            };
         })(this), 200000, this);
         await this.checkCurrentStreams();
-        logger.log("Streams status checked", "ready");
+        logger.log('Streams status checked', 'ready');
 
         setInterval((function (self) {
             return function () {
                 self.fetchLive();
-            }
+            };
         })(this), 120000, this);
         await this.fetchLive();
     }
@@ -66,14 +66,14 @@ class FetchLive {
     }
 
     streamerAdded(streamer) {
-        return // Removed because it's not working
-        if (!this.subscriptions.has(streamer)) {
+        return; // Removed because it's not working
+        /* if (!this.subscriptions.has(streamer)) {
             let webhookID = Math.floor(this.subscriptions.size / 2000);
             if (webhookID >= parseInt(process.env.WEBHOOK_CLIENTS)) {
                 webhookID = parseInt(process.env.WEBHOOK_CLIENTS) - 1;
-                logger.warn("You need to add more webhooks clients !!");
+                logger.warn('You need to add more webhooks clients !!');
             }
-            const webhook = this.webhooks[webhookID] // Max 5000 streamers per webhook
+            const webhook = this.webhooks[webhookID]; // Max 5000 streamers per webhook
             const ev1 = webhook.onStreamOnline(streamer, async event => {
                 await this.client.container.pg.streamOnline(event.broadcasterId);
                 const alerts = await this.client.container.pg.listAlertsByStreamer(event.broadcasterId);
@@ -95,28 +95,28 @@ class FetchLive {
 
             logger.debug(`Subscriptions on for ${streamer} on webhook${webhookID}`);
             this.subscriptions.set(streamer, [webhook, ev1, ev2]);
-        }
+        } */
     }
 
     async streamerRemoved(streamer) {
-        return // Removed because it's not working
-        if (this.subscriptions.has(streamer)) {
+        return; // Removed because it's not working
+        /* if (this.subscriptions.has(streamer)) {
             const alerts = await this.client.container.pg.listAlertsByStreamer(streamer);
             if (alerts.length === 0) {
-                logger.debug(`Subscriptions off for ${streamer}`)
+                logger.debug(`Subscriptions off for ${streamer}`);
                 const sub = this.subscriptions.get(streamer);
                 sub[1].stop();
                 sub[2].stop();
                 this.subscriptions.delete(streamer);
             }
-        }
+        }*/
     }
 
     async showStreamOnlineMessage(alert, stream, channel, user, lang) {
         if (!user) user = await stream.getUser();
         const game = await stream.getGame();
 
-        const embed = await generateLiveEmbed(user, stream, game, alert, lang)
+        const embed = await generateLiveEmbed(user, stream, game, alert, lang);
 
         if (!alert.alert_message) {
             channel.send({
@@ -134,11 +134,11 @@ class FetchLive {
                     }).catch(logger.error);
                 })
                 .catch(err => {
-                    logger.debug(`Can't find message ${alert.alert_message} in channel ${channel.id}`)
+                    logger.debug(`Can't find message ${alert.alert_message} in channel ${channel.id}`);
                     if (err.code === 10008) {
                         this.client.container.pg.removeAlertMessage(alert.guild_id, alert.streamer_id);
                     }
-                })
+                });
         }
     }
 
@@ -147,10 +147,10 @@ class FetchLive {
 
         const videos = await this.client.container.twitch.videos.getVideosByUser(alert.streamer_id, {
             limit: 1,
-            orderBy: "time",
-            type: "archive"
+            orderBy: 'time',
+            type: 'archive'
         });
-        const video = videos.data.length !== 0 ? videos.data[0] : null
+        const video = videos.data.length !== 0 ? videos.data[0] : null;
         if (alert.alert_message)
             channel.messages.fetch(alert.alert_message)
                 .then(message => {
@@ -159,8 +159,8 @@ class FetchLive {
                         // Pas de redif
                         if (message.embeds.length > 0) {
                             embed = new EmbedBuilder(message.embeds[0].data);
-                            embed.setTitle(getString(lang, "LIVE_END"));
-                            embed.setFields(embed.data.fields.filter(field => field.name !== getString(lang, "VIEWERS")));
+                            embed.setTitle(getString(lang, 'LIVE_END'));
+                            embed.setFields(embed.data.fields.filter(field => field.name !== getString(lang, 'VIEWERS')));
                             message.edit({
                                 content: alert.alert_end,
                                 embeds: [embed]
@@ -171,8 +171,8 @@ class FetchLive {
                     } else {
                         if (message.embeds.length > 0) {
                             embed = new EmbedBuilder(message.embeds[0].data);
-                            embed.setTitle(getString(lang, "LIVE_END"));
-                            embed.setFields(embed.data.fields.filter(field => field.name !== getString(lang, "VIEWERS")));
+                            embed.setTitle(getString(lang, 'LIVE_END'));
+                            embed.setFields(embed.data.fields.filter(field => field.name !== getString(lang, 'VIEWERS')));
                             embed.setURL(video.url);
                             message.edit({
                                 content: `${alert.alert_end} <${video.url}>`,
@@ -213,7 +213,7 @@ class FetchLive {
             return;
         }
 
-        const lang = alert.guild_language !== "default" ? alert.guild_language : guild.preferredLocale;
+        const lang = alert.guild_language !== 'default' ? alert.guild_language : guild.preferredLocale;
 
         if (stream) {
             await this.showStreamOnlineMessage(alert, stream, channel, user, lang);
