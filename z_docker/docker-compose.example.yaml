@@ -1,10 +1,11 @@
 services:
+  # This assumes you have unzipped your twitchalerts to /opt/twitchalerts but you can adjust below as needed
   twwbot:
     container_name: twitchalerts
     hostname: twitchalerts
     build:
       context: /opt/twitchalerts
-      dockerfile: /opt/twitchalerts/twitchalerts.Dockerfile
+      dockerfile: /opt/twitchalerts/z_docker/twitchalerts.Dockerfile
     ports:
       - "3000:3000/tcp"
     environment:
@@ -20,3 +21,14 @@ services:
       PUID: 901
       PGID: 901
       PORT: 3000
+  
+  # If you don't already have postgres, this will set up a simple instance for you
+  postgres:
+    image: postgres
+      container_name: postgres
+      ports:
+        - "5432:5432/tcp"
+      environment:
+        POSTGRES_USER: "twitchalerts"
+        POSTGRES_PASSWORD: "twitchalerts"
+        POSTGRES_DB: "twitchalerts"
