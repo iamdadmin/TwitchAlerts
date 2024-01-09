@@ -2,8 +2,8 @@ require('dotenv').config();
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const DiscordOauth2 = require("discord-oauth2");
-const logger = require("./modules/logger");
+const DiscordOauth2 = require('discord-oauth2');
+const logger = require('./modules/logger');
 
 // Connexion à Discord
 const oauth = new DiscordOauth2({
@@ -17,19 +17,19 @@ async function init(pgsql, discord, twitch, fetchLive){
 
     const app = express();
 
-// CONFIGURATION ==================================
+    // CONFIGURATION ==================================
     app.use(cookieParser());
 
     app.use('/', express.static('public'));
 
-// ROUTES =========================================
+    // ROUTES =========================================
 
     let functions = require('./app/functions')(oauth, cookies);
 
     require('./app/getAPI.js')(app, pgsql, oauth, discord, twitch, functions, __dirname, cookies);
     require('./app/postAPI.js')(app, pgsql, oauth, discord, twitch, functions, __dirname, cookies);
 
-// LAUNCH ========================================
+    // LAUNCH ========================================
     app.listen(process.env.PORT, async function () {
         logger.log(`Server started on port ${process.env.PORT}`);
         await fetchLive.markAsReady();

@@ -3,7 +3,6 @@
   "version": "3.0.0",
   "description": "Get real time alerts on discord when going live on Twitch",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js",
     "web": "node web.js"
